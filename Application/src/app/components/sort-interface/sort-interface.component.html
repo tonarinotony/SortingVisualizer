@@ -1,0 +1,41 @@
+
+<div id = "optionContainer" class="container">
+    <div class = "btnGrid">
+        <button (click)="selSort()"> Selection Sort </button>
+        <button (click)="bubbleSort()"> BubSort </button>
+        <button (click)="insertionSort()"> Insertion Sort </button>
+        <button (click)="mergeSort()"> Merge Sort </button>
+    </div>
+
+    <div>
+        <label for="sizeSlider">Change Array Length: </label>
+        <input type="range" min="1" max="100" value="50"
+        class="slider" id="sizeSlider" (input)="setSize($event)">
+        <P id="sizeTag">Size: 50 </P>
+    </div>
+
+    <div id ="minMaxOption">
+        <div>
+            <label for="minNumber">Min:</label>
+            <input type="number" id="minNumber" class= "numBox" step ="1" value="5">
+        </div>
+        <div>
+            <label for="maxNumber">Max:</label>
+            <input type="number" id="maxNumber" class= "numBox" step ="1" value="200">
+        </div>
+        <div>
+            <label for="timer">Timer(ms):</label>
+            <input type="number" id="timer" class= "numBox" step ="1" value="100">
+        </div>
+        <button (click)="changeSettings()">Change Settings</button>
+    </div>
+
+ 
+
+    
+</div>
+
+<main>
+    <app-interface-bars *ngFor="let num of bars; index as i;" [bars] = "num">
+    </app-interface-bars>
+</main>

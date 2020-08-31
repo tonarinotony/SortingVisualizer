@@ -1,0 +1,21 @@
+main{
+    padding: 10px;
+    display:flex;
+    width: 100%;
+    justify-content:center;
+}
+.slider{
+    width: 500px;
+}
+#optionContainer{
+   text-align:center;
+   border: 1px solid black;
+}
+
+.btnGrid{
+    justify-content: space-around;
+}
+
+.minMaxOption{
+    justify-content: flex-start;
+}
