@@ -18,13 +18,14 @@ export class SortInterfaceComponent implements OnInit {
   timer:number;
   minNum:number;
   maxNum:number;
+  paused:boolean = false;
 
   constructor() { }
 
   ngOnInit(): void {
     this.changeTimer();
     this.changeMinMax(); 
-    this.newArray(this.size);
+    this.resetArray();
   }
 
 
@@ -32,10 +33,13 @@ export class SortInterfaceComponent implements OnInit {
     this.timer = time;
   }
 
+  resetArray(){
+    this.newArray(this.size);
+  }
+
   changeSettings(){
     this.changeTimer();
     this.changeMinMax();
-    this.newArray(this.size);
   }
 
   changeTimer(){
@@ -67,20 +71,21 @@ export class SortInterfaceComponent implements OnInit {
   }
 
 
+
   async selSort(){
     
     for(let i =0; i < this.size; i++){
       let minimum = i;
       this.select(this.bars[i],'red');
-      for(let j = i+1; j< this.size; j++){
-        this.select(this.bars[j],'red');
-        await this.sleep(this.timer);
-        if(this.bars[j].height < this.bars[minimum].height){
-          this.deselect(this.bars[minimum]);
-          minimum = j;
-        }
-        else
-          this.deselect(this.bars[j]);
+        for(let j = i+1; j< this.size; j++){
+          this.select(this.bars[j],'red');
+          await this.sleep(this.timer);
+          if(this.bars[j].height < this.bars[minimum].height){
+            this.deselect(this.bars[minimum]);
+            minimum = j;
+          }
+          else
+            this.deselect(this.bars[j]);
       }
       await this.swap(this.bars,i,minimum);
     }
@@ -178,6 +183,50 @@ export class SortInterfaceComponent implements OnInit {
     }
   }
 
+  async quickSort(){
+    let n = this.bars.length;
+    var stack = new Array(n);
+    let current = 1;
+    stack[0] = 0;
+    stack[1] = n-1;
+
+    while(current >= 0){
+      let h = stack[current--];
+      let l = stack[current--];
+      this.select(this.bars[l],'green');
+      this.select(this.bars[h],'green');
+      await this.sleep(this.timer);
+      let p = await this.partition(this.bars,l,h);
+      if (p-1>l){
+        stack[++current] = l;
+        stack[++current] = p-1;
+      }
+
+      if(p+1<h){
+        stack[++current] = p+1;
+        stack[++current] = h;
+      }
+      this.deselect(this.bars[l]);
+      this.deselect(this.bars[h]);
+    }
+
+  }
+
+  async partition(arr:Bars[],low:number,high:number){
+    let pivot = arr[high].height;
+    let i = low-1;
+    for( let j = low; j <= high-1; j++){
+      if(arr[j].height <= pivot){
+        i++;
+
+        await this.swap(arr,i,j);
+      }
+    }
+
+    this.swap(arr,i+1,high);
+    //i+1 is the pivot point
+    return i+1;
+  }
 
   sleep(ms):any{
     return new Promise(resolve => setTimeout(resolve,ms));
